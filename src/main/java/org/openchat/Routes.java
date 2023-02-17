@@ -1,17 +1,28 @@
 package org.openchat;
 
-import static spark.Spark.get;
-import static spark.Spark.options;
+import org.openchat.api.UsersAPI;
+import org.openchat.domain.users.UserService;
+
+import static spark.Spark.*;
 
 public class Routes {
 
+    private UsersAPI usersAPI;
+
     public void create() {
+        createAPIs();
         swaggerRoutes();
         openchatRoutes();
     }
 
+    private void createAPIs() {
+        UserService userService = new UserService();
+        usersAPI = new UsersAPI(userService);
+    }
+
     private void openchatRoutes() {
         get("status", (req, res) -> "OpenChat: OK!");
+        post("users", (req, res) -> usersAPI.createUser(req, res));
     }
 
     private void swaggerRoutes() {
