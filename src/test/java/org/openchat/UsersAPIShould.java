@@ -44,20 +44,20 @@ public class UsersAPIShould {
     @BeforeEach
     public void initialise() {
         usersAPI = new UsersAPI(userService);
+        
+        given(request.body()).willReturn(jsonContaining(REGISTRATION_DATA));
+        given(userService.createUser(REGISTRATION_DATA)).willReturn(USER);
     }
 
     @Test
     public void createANewUser() {
-        given(request.body()).willReturn(jsonContaining(REGISTRATION_DATA));
         usersAPI.createUser(request, response);
+
         verify(userService).createUser(REGISTRATION_DATA);
     }
 
     @Test
     public void returnJSONRepresentingANewlyCreatedUser() {
-        given(request.body()).willReturn(jsonContaining(REGISTRATION_DATA));
-        given(userService.createUser(REGISTRATION_DATA)).willReturn(USER);
-
         String result = usersAPI.createUser(request, response);
 
         verify(response).status(201);
