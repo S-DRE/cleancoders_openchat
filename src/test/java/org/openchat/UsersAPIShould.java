@@ -16,10 +16,10 @@ import spark.Response;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.openchat.infrastructure.builders.UserBuilder.aUser;
 
 @ExtendWith(MockitoExtension.class)
 public class UsersAPIShould {
@@ -29,7 +29,12 @@ public class UsersAPIShould {
     private static final String ABOUT = "About Alice";
     private static final String USER_ID = UUID.randomUUID().toString();
     private static final RegistrationData REGISTRATION_DATA = new RegistrationData(USERNAME, PASSWORD, ABOUT);
-    private static final User USER = new User(USER_ID, USERNAME, PASSWORD, ABOUT);
+    private static final User USER = aUser()
+                                            .withId(USER_ID)
+                                            .withUsername(USERNAME)
+                                            .withPassword(PASSWORD)
+                                            .withAbout(ABOUT)
+                                            .build();
     @Mock
     Request request;
     @Mock
@@ -44,7 +49,7 @@ public class UsersAPIShould {
     @BeforeEach
     public void initialise() {
         usersAPI = new UsersAPI(userService);
-        
+
         given(request.body()).willReturn(jsonContaining(REGISTRATION_DATA));
         given(userService.createUser(REGISTRATION_DATA)).willReturn(USER);
     }
