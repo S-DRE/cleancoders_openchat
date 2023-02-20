@@ -10,6 +10,7 @@ import org.openchat.api.UsersAPI;
 import org.openchat.domain.users.RegistrationData;
 import org.openchat.domain.users.User;
 import org.openchat.domain.users.UserService;
+import org.openchat.domain.users.UsernameAlreadyInUseException;
 import spark.Request;
 import spark.Response;
 
@@ -47,7 +48,7 @@ public class UsersAPIShould {
     private UsersAPI usersAPI;
 
     @BeforeEach
-    public void initialise() {
+    public void initialise() throws UsernameAlreadyInUseException {
         usersAPI = new UsersAPI(userService);
 
         given(request.body()).willReturn(jsonContaining(REGISTRATION_DATA));
@@ -55,7 +56,7 @@ public class UsersAPIShould {
     }
 
     @Test
-    public void createANewUser() {
+    public void createANewUser() throws UsernameAlreadyInUseException {
         usersAPI.createUser(request, response);
 
         verify(userService).createUser(REGISTRATION_DATA);
@@ -68,6 +69,17 @@ public class UsersAPIShould {
         verify(response).status(201);
         verify(response).type("application/json");
         assertEquals(result, jsonContaining(USER));
+    }
+    
+    @Test
+    public void returnAnErrorWhenCreatingAUserWithAnExistingUsername() throws UsernameAlreadyInUseException {
+
+        given(userService.createUser(REGISTRATION_DATA)).willThrow(UsernameAlreadyInUseException.class);
+
+        String result = usersAPI.createUser(request, response);
+
+        verify(response).status(400);
+        assertEquals("Username already in use", result);
     }
 
     private String jsonContaining(User user) {
