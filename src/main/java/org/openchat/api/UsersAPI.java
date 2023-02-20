@@ -9,6 +9,7 @@ import spark.Request;
 import spark.Response;
 
 import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
+import static org.openchat.infrastructure.json.UserJson.jsonFor;
 
 public class UsersAPI {
     private UserService userService;
@@ -22,7 +23,7 @@ public class UsersAPI {
         User user = userService.createUser(registration);
         response.status(CREATED_201);
         response.type("application/json");
-        return UserJson.jsonFor(user);
+        return jsonFor(user);
     }
 
     private RegistrationData registrationDataFrom(Request request) {
@@ -32,15 +33,5 @@ public class UsersAPI {
           json.getString("password", ""),
           json.getString("about", "")
         );
-    }
-
-    private class UserJson {
-        public static String jsonFor(User user) {
-            return new JsonObject()
-                    .add("id", user.getId())
-                    .add("username", user.getUsername())
-                    .add("about", user.getAbout())
-                    .toString();
-        }
     }
 }
