@@ -1,6 +1,8 @@
 package org.openchat;
 
 import org.openchat.api.UsersAPI;
+import org.openchat.domain.users.IdGenerator;
+import org.openchat.domain.users.UserRepository;
 import org.openchat.domain.users.UserService;
 
 import static spark.Spark.*;
@@ -16,7 +18,9 @@ public class Routes {
     }
 
     private void createAPIs() {
-        UserService userService = new UserService();
+        IdGenerator idGenerator = new IdGenerator();
+        UserRepository userRepository = new UserRepository();
+        UserService userService = new UserService(idGenerator, userRepository);
         usersAPI = new UsersAPI(userService);
     }
 
