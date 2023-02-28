@@ -10,6 +10,7 @@ import org.openchat.domain.users.*;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -47,6 +48,16 @@ public class UserServiceShould {
 
         verify(userRepository).add(USER);
         assertEquals(USER, result);
+    }
+    
+    @Test
+    public void throwExceptionWhenAttemptingToCreateADuplicateUser() throws UsernameAlreadyInUseException {
+
+        given(userRepository.isUsernameTaken(USERNAME)).willReturn(true);
+
+        Exception exception = assertThrows(UsernameAlreadyInUseException.class, () -> {
+            userService.createUser(REGISTRATION_DATA);
+        });
     }
 
 }

@@ -11,6 +11,23 @@ public class UserService {
     }
 
     public User createUser(RegistrationData registrationData) throws UsernameAlreadyInUseException {
-        throw new UnsupportedOperationException();
+        validateUsername(registrationData.getUsername());
+        User user = createUserFrom(registrationData);
+
+        userRepository.add(user);
+        return user;
+    }
+
+    private void validateUsername(String username) throws UsernameAlreadyInUseException {
+        if (userRepository.isUsernameTaken(username))
+            throw new UsernameAlreadyInUseException();
+    }
+
+    private User createUserFrom(RegistrationData registrationData) {
+        String userId = idGenerator.next();
+        return new User(userId,
+                             registrationData.getUsername(),
+                             registrationData.getPassword(),
+                             registrationData.getAbout());
     }
 }
