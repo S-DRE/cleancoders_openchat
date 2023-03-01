@@ -52,7 +52,6 @@ public class UserServiceShould {
     
     @Test
     public void throwExceptionWhenAttemptingToCreateADuplicateUser() throws UsernameAlreadyInUseException {
-
         given(userRepository.isUsernameTaken(USERNAME)).willReturn(true);
 
         Exception exception = assertThrows(UsernameAlreadyInUseException.class, () -> {

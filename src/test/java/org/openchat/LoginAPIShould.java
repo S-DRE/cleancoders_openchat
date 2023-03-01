@@ -15,6 +15,7 @@ import spark.Response;
 
 import java.util.Optional;
 
+import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -65,6 +66,18 @@ public class LoginAPIShould {
         assertEquals(jsonContaining(USER), result);
     }
 
+    @Test
+    public void returnAnErrorWhenCredentialsAreInvalid() {
+        given(request.body()).willReturn(jsonContaining(USER_CREDENTIALS));
+        given(userRepository.userFor(USER_CREDENTIALS)).willReturn(empty());
+
+        String result = loginAPI.login(request, response);
+
+        verify(response).status(404);
+
+        assertEquals("Invalid Credentials.", result);
+    }
+    
     private String jsonContaining(User user) {
         return new JsonObject()
                 .add("id", user.getId())
