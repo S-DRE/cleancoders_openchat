@@ -22,7 +22,7 @@
 		<mockito.version>5.1.1</mockito.version>
 		<mockito.junit.jupiter.version>5.1.1</mockito.junit.jupiter.version>
 		<cucumber.version>1.2.2</cucumber.version>
-		<restassured.version>3.0.5</restassured.version>
+		<restassured.version>5.3.0</restassured.version>
 	</properties>
 
 	<dependencies>
@@ -107,10 +107,17 @@
 			<version>${restassured.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.3.0</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>json-schema-validator</artifactId>
-			<version>3.0.5</version>
+			<version>5.3.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
