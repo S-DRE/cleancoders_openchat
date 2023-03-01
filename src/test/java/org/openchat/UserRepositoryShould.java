@@ -27,4 +27,13 @@ public class UserRepositoryShould {
         assertTrue(userRepository.isUsernameTaken(ALICE.getUsername()));
         assertFalse(userRepository.isUsernameTaken(CHARLIE.getUsername()));
     }
+    
+    @Test
+    public void returnUserMatchingValidCredentials() {
+        // We could use assertJ since jUnit does not have an assertThat function
+        // assertThat(userRepository.userFor(ALICE_CREDENTIALS)).contains(ALICE);
+
+        // But another way of doing this without adding that extra import is:
+        assertTrue(userRepository.userFor(ALICE_CREDENTIALS).contains(ALICE));
+    }
 }
