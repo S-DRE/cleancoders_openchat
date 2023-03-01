@@ -24,7 +24,7 @@ public class Routes {
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService(idGenerator, userRepository);
         usersAPI = new UsersAPI(userService);
-        loginAPI = new LoginAPI();
+        loginAPI = new LoginAPI(userRepository);
     }
 
     private void openchatRoutes() {
