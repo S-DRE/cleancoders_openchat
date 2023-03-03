@@ -19,6 +19,10 @@ public class UserCredentials {
         return password;
     }
 
+    public boolean matches(User user) {
+        return username.equals(user.getUsername()) && password.equals(user.getPassword());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
